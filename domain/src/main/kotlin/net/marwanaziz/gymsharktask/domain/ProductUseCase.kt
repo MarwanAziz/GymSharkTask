@@ -8,6 +8,13 @@ class ProductUseCase(
     }
 
     suspend fun getProduct(id: Long): DomainResult<Product, GetProductError> {
-        return repository.getProduct(id)
+        return when (val result = repository.getProducts()) {
+            is DomainResult.Failure -> DomainResult.Failure(result.error)
+            is DomainResult.Success -> {
+                result.value.find { it.id == id }
+                    ?.let { DomainResult.Success(it) }
+                    ?: DomainResult.Failure(ProductNotFound(id))
+            }
+        }
     }
 }

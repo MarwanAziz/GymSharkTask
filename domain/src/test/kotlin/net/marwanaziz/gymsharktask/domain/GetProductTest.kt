@@ -15,7 +15,7 @@ class GetProductTest {
         val result = useCase.getProduct(id)
 
         assertEquals(DomainResult.Success(expected), result)
-        assertEquals(id, repository.requestedId)
+        assertEquals(1, repository.getProductsCallCount)
     }
 
     @Test
@@ -27,21 +27,20 @@ class GetProductTest {
         val result = useCase.getProduct(id)
 
         assertEquals(DomainResult.Failure(ProductNotFound(id)), result)
-        assertEquals(id, repository.requestedId)
+        assertEquals(1, repository.getProductsCallCount)
     }
 
     @Test
     fun returnsCatalogueUnavailableWhenTheCatalogueCannotBeLoaded() = runTest {
-        val id = 1L
         val repository = FakeProductRepository(
-            products = listOf(product(id = id)),
+            products = listOf(product(id = 1L)),
             catalogueUnavailable = true,
         )
         val useCase = ProductUseCase(repository)
 
-        val result = useCase.getProduct(id)
+        val result = useCase.getProduct(1L)
 
         assertEquals(DomainResult.Failure(CatalogueUnavailable), result)
-        assertEquals(id, repository.requestedId)
+        assertEquals(1, repository.getProductsCallCount)
     }
 }

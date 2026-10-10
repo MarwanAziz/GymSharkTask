@@ -5,7 +5,6 @@ import net.marwanaziz.gymsharktask.data.remote.CatalogueResponse
 import net.marwanaziz.gymsharktask.data.remote.CatalogueResult
 import net.marwanaziz.gymsharktask.domain.CatalogueUnavailable
 import net.marwanaziz.gymsharktask.domain.DomainResult
-import net.marwanaziz.gymsharktask.domain.ProductNotFound
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -24,31 +23,19 @@ class RemoteProductRepositoryTest {
             val repository = repository(failure)
 
             assertEquals(DomainResult.Failure(CatalogueUnavailable), repository.getProducts())
-            assertEquals(DomainResult.Failure(CatalogueUnavailable), repository.getProduct(1L))
         }
     }
 
     @Test
-    fun returnsProductNotFoundWithTheRequestedId() = runTest {
+    fun returnsMappedProductsWhenTheCatalogueSucceeds() = runTest {
+        val hits = listOf(catalogueHit(id = 1L), catalogueHit(id = 2L))
         val repository = repository(
-            CatalogueResult.Success(CatalogueResponse(hits = listOf(catalogueHit(id = 1L)))),
+            CatalogueResult.Success(CatalogueResponse(hits = hits)),
         )
 
-        val result = repository.getProduct(99L)
+        val result = repository.getProducts()
 
-        assertEquals(DomainResult.Failure(ProductNotFound(99L)), result)
-    }
-
-    @Test
-    fun returnsTheProductWhenTheIdIsPresent() = runTest {
-        val hit = catalogueHit(id = 1L)
-        val repository = repository(
-            CatalogueResult.Success(CatalogueResponse(hits = listOf(catalogueHit(id = 2L), hit))),
-        )
-
-        val result = repository.getProduct(1L)
-
-        assertEquals(DomainResult.Success(mapper.map(hit)), result)
+        assertEquals(DomainResult.Success(hits.map(mapper::map)), result)
     }
 
     private fun repository(result: CatalogueResult): RemoteProductRepository {

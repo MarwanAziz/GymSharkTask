@@ -4,9 +4,7 @@ import net.marwanaziz.gymsharktask.data.remote.CatalogueRemote
 import net.marwanaziz.gymsharktask.data.remote.CatalogueResult
 import net.marwanaziz.gymsharktask.domain.CatalogueUnavailable
 import net.marwanaziz.gymsharktask.domain.DomainResult
-import net.marwanaziz.gymsharktask.domain.GetProductError
 import net.marwanaziz.gymsharktask.domain.Product
-import net.marwanaziz.gymsharktask.domain.ProductNotFound
 import net.marwanaziz.gymsharktask.domain.ProductRepository
 
 class RemoteProductRepository(
@@ -22,17 +20,6 @@ class RemoteProductRepository(
             CatalogueResult.TransportFailure,
             CatalogueResult.UnreadableBody,
             -> DomainResult.Failure(CatalogueUnavailable)
-        }
-    }
-
-    override suspend fun getProduct(id: Long): DomainResult<Product, GetProductError> {
-        return when (val result = getProducts()) {
-            is DomainResult.Failure -> DomainResult.Failure(result.error)
-            is DomainResult.Success -> {
-                result.value.find { it.id == id }
-                    ?.let { DomainResult.Success(it) }
-                    ?: DomainResult.Failure(ProductNotFound(id))
-            }
         }
     }
 }
