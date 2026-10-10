@@ -25,3 +25,4 @@ dependencyResolutionManagement {
 rootProject.name = "GymSharkTask"
 include(":app")
 include(":domain")
+include(":data:remote")

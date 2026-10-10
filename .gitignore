@@ -81,3 +81,12 @@ lint/tmp/
 
 # macOS
 .DS_Store
+.idea/.gitignore
+.idea/AndroidProjectSystem.xml
+.idea/compiler.xml
+.idea/deviceManager.xml
+.idea/kotlinc.xml
+.idea/misc.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
