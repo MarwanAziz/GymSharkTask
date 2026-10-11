@@ -33,8 +33,8 @@ class ProductListViewModel @Inject constructor(
     private val _state = MutableStateFlow<ProductListState>(ProductListState.Loading)
     val state: StateFlow<ProductListState> = _state.asStateFlow()
 
-    private val productSelections = MutableSharedFlow<Long>(extraBufferCapacity = 1)
-    val productSelected: SharedFlow<Long> = productSelections.asSharedFlow()
+    private val productSelections = MutableSharedFlow<Product>(extraBufferCapacity = 1)
+    val productSelected: SharedFlow<Product> = productSelections.asSharedFlow()
 
     init {
         load()
@@ -44,8 +44,8 @@ class ProductListViewModel @Inject constructor(
         load()
     }
 
-    fun onProductTapped(id: Long) {
-        productSelections.tryEmit(id)
+    fun onProductTapped(product: Product) {
+        productSelections.tryEmit(product)
     }
 
     private fun load() {

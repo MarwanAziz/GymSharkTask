@@ -30,7 +30,7 @@ Write the test for a behaviour before its implementation.
 - Mapper tests in `:data` for a normal hit, a hit with labels, a null label list, and a missing image.
 - Repository test in `:data` covers `CatalogueUnavailable`. `ProductNotFound` with the requested id is a `ProductUseCase` test.
 - One HTTP test in `:data:remote` that serves a local fixture and checks the decoded JSON.
-- Coordinator test in `:app` that a selected id opens detail.
+- Coordinator test in `:app` that a selected product opens detail.
 - Domain and data tests run on the JVM with JUnit 4.
 
 Run the tests for every module you change before finishing.
