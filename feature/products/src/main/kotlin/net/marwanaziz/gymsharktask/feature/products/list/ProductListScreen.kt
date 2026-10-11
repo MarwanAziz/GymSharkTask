@@ -32,7 +32,7 @@ import net.marwanaziz.gymsharktask.feature.products.formatPrice
 fun ProductListScreen(
     state: ProductListState,
     onRetry: () -> Unit,
-    onProductTapped: (Long) -> Unit,
+    onProductTapped: (Product) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(modifier = modifier) { padding ->
@@ -73,7 +73,7 @@ fun ProductListScreen(
 @Composable
 private fun ProductGrid(
     products: List<Product>,
-    onProductTapped: (Long) -> Unit,
+    onProductTapped: (Product) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -94,10 +94,10 @@ private fun ProductGrid(
 @Composable
 private fun ProductCell(
     product: Product,
-    onProductTapped: (Long) -> Unit,
+    onProductTapped: (Product) -> Unit,
 ) {
     val locale = LocalConfiguration.current.locales[0]
-    Card(onClick = { onProductTapped(product.id) }) {
+    Card(onClick = { onProductTapped(product) }) {
         Column {
             ProductImage(
                 url = product.featuredImageUrl,

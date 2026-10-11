@@ -4,6 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import net.marwanaziz.gymsharktask.domain.Product
 import net.marwanaziz.gymsharktask.domain.ProductUseCase
 import net.marwanaziz.gymsharktask.feature.products.FakeProductRepository
 import net.marwanaziz.gymsharktask.feature.products.runViewModelTest
@@ -59,15 +60,16 @@ class ProductListViewModelTest {
             ProductUseCase(FakeProductRepository()),
             dispatcher,
         )
-        val emitted = mutableListOf<Long>()
+        val product = sampleProduct(id = 7L)
+        val emitted = mutableListOf<Product>()
         val collection = launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.productSelected.collect { emitted.add(it) }
         }
 
-        viewModel.onProductTapped(7L)
+        viewModel.onProductTapped(product)
         advanceUntilIdle()
 
-        assertEquals(listOf(7L), emitted)
+        assertEquals(listOf(product), emitted)
         collection.cancel()
     }
 }
